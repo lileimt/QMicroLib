@@ -1,0 +1,44 @@
+* {
+    font-family:"Î¢ÈíÑÅºÚ";
+    font-size:14px;
+}
+
+QWidget{
+    border:none;
+    background:white;
+}
+
+QTableWidget {
+    border:none;
+    background:white;
+}
+
+QTableWidget::item:selected{
+    /*border:1px solid rgb(125, 162, 206);*/
+    color:black;
+    background:rgb(205, 226, 252);
+    /*background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);*/
+}
+
+QToolButton{
+    border:none;
+    color:grey;
+    background:transparent;
+}
+
+QToolButton:hover{
+    color:blue;
+}
+
+/*QToolBarWidget{
+    border:1px solid black;
+    background:grey;
+}*/
+
+/*QToolButton#btnBack{
+    border-image:url(:/toolbar/left);
+}
+
+QToolButton#btnBack:hover{
+    border-image:url(:/toolbar/left_hover);
+}*/

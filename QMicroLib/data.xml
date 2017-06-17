@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <folder name="图片" time="2017-06-12 13:25">
+        <folder name="我的照片" time="2017-06-12 13:25">
+            <file>
+                <filename>a.png</filename>
+                <size>12345</size>
+                <lastModified>2017-06-12 13:25</lastModified>
+            </file>
+            <file>
+                <filename>b.png</filename>
+                <size>32445</size>
+                <lastModified>2017-06-12 3:15</lastModified>
+            </file>
+            <file>
+                <filename>c.png</filename>
+                <size>4566</size>
+                <lastModified>2017-06-11 2:45</lastModified>
+            </file>
+        </folder>
+        <file>
+            <filename>d.png</filename>
+            <size>12345</size>
+            <lastModified>2017-06-12 13:15</lastModified>
+        </file>
+	</folder>
+	<folder name="我的文档" time="2017-06-12 10:25">
+		<file>
+			<filename>文档.docx</filename>
+			<size>12345</size>
+			<lastModified>2017-06-12 13:25</lastModified>
+		</file>
+		<file>
+			<filename>表格.xls</filename>
+			<size>32445</size>
+			<lastModified>2017-06-12 3:15</lastModified>
+		</file>
+		<file>
+			<filename>课件.ppt</filename>
+			<size>4566</size>
+			<lastModified>2017-06-11 2:45</lastModified>
+		</file>
+	</folder>
+	<file>
+		<filename>我的程序.cpp</filename>
+		<size>12345</size>
+		<lastModified>2017-06-12 13:15</lastModified>
+	</file>
+    <file>
+        <filename>QQ.exe</filename>
+        <size>565431</size>
+        <lastModified>2017-11-12 11:05</lastModified>
+    </file>
+    <file>
+        <filename>linux.iso</filename>
+        <size>4356565</size>
+        <lastModified>2017-06-12 22:13</lastModified>
+    </file>
+	    <file>
+        <filename>我的文档.doc</filename>
+        <size>4356565</size>
+        <lastModified>2017-06-12 22:13</lastModified>
+    </file>
+</root>

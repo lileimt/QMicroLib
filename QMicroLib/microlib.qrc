@@ -1,0 +1,55 @@
+<RCC>
+    <qresource prefix="/qss">
+        <file alias="skin">Resources/qss/skin.css</file>
+    </qresource>
+    <qresource prefix="/filetype">
+        <file alias="apk">Resources/images/filetype/barcode_result_page_type_apk_icon.png</file>
+        <file alias="doc">Resources/images/filetype/barcode_result_page_type_doc_icon.png</file>
+        <file alias="dir">Resources/images/filetype/barcode_result_page_type_file_dir_icon.png</file>
+        <file alias="html">Resources/images/filetype/barcode_result_page_type_html_icon.png</file>
+        <file alias="img">Resources/images/filetype/barcode_result_page_type_img_icon.png</file>
+        <file alias="ipa">Resources/images/filetype/barcode_result_page_type_ipa_icon.png</file>
+        <file alias="music">Resources/images/filetype/barcode_result_page_type_music_icon.png</file>
+        <file alias="pdf">Resources/images/filetype/barcode_result_page_type_pdf_icon.png</file>
+        <file alias="ppt">Resources/images/filetype/barcode_result_page_type_ppt_icon.png</file>
+        <file alias="private">Resources/images/filetype/barcode_result_page_type_private_icon.png</file>
+        <file alias="share">Resources/images/filetype/barcode_result_page_type_share_icon.png</file>
+        <file alias="torrent">Resources/images/filetype/barcode_result_page_type_torrent_icon.png</file>
+        <file alias="txt">Resources/images/filetype/barcode_result_page_type_txt_icon.png</file>
+        <file alias="unkown">Resources/images/filetype/barcode_result_page_type_unkonwn_icon.png</file>
+        <file alias="vcf">Resources/images/filetype/barcode_result_page_type_vcf_icon.png</file>
+        <file alias="vedio">Resources/images/filetype/barcode_result_page_type_vedio_icon.png</file>
+        <file alias="vsd">Resources/images/filetype/barcode_result_page_type_vsd_icon.png</file>
+        <file alias="xls">Resources/images/filetype/barcode_result_page_type_xls_icon.png</file>
+        <file alias="zip">Resources/images/filetype/barcode_result_page_type_zip_icon.png</file>
+    </qresource>
+    <qresource prefix="/toolbar">
+        <file alias="download">Resources/images/toolbar/download.png</file>
+        <file alias="more">Resources/images/toolbar/more.png</file>
+        <file alias="new">Resources/images/toolbar/new.png</file>
+        <file alias="refresh">Resources/images/toolbar/refresh.png</file>
+        <file alias="search">Resources/images/toolbar/search.png</file>
+        <file alias="send">Resources/images/toolbar/send.png</file>
+        <file alias="share">Resources/images/toolbar/share.png</file>
+        <file alias="upload">Resources/images/toolbar/upload.png</file>
+        <file alias="detailview">Resources/images/toolbar/detailview.png</file>
+        <file alias="detailview_hover">Resources/images/toolbar/detailview_hover.png</file>
+        <file alias="home">Resources/images/toolbar/home.png</file>
+        <file alias="home_hover">Resources/images/toolbar/home_hover.png</file>
+        <file alias="view">Resources/images/toolbar/view.png</file>
+        <file alias="view_hover">Resources/images/toolbar/view_hover.png</file>
+        <file alias="left">Resources/images/toolbar/left.png</file>
+        <file alias="left_hover">Resources/images/toolbar/left_hover.png</file>
+        <file alias="refresh_hover">Resources/images/toolbar/refresh_hover.png</file>
+        <file alias="down">Resources/images/toolbar/down.png</file>
+        <file alias="right">Resources/images/toolbar/right.png</file>
+        <file alias="right_hover">Resources/images/toolbar/right_hover.png</file>
+        <file>Resources/images/toolbar/delete.png</file>
+    </qresource>
+    <qresource prefix="/navagate">
+        <file alias="history">Resources/images/navigate/my-recent-folder.png</file>
+        <file alias="allfolder">Resources/images/navigate/open-folder.png</file>
+        <file alias="recylebin">Resources/images/navigate/recycle-bin-empty.png</file>
+        <file alias="received">Resources/images/navigate/received.png</file>
+    </qresource>
+</RCC>
