@@ -31,22 +31,6 @@ QMicroLib::QMicroLib(QWidget *parent)
 	xml.openXML("data.xml");
 
 	CFileNode *fileNode = xml.getFileNode();
-
-	//CFileNode *fileNode = new CFileNode(QStringLiteral("文件"), "123", "2017-06-07", "1111", "22222", true);
-	//CFileNode *fileNode1 = new CFileNode(QStringLiteral("我的文件夹"), "1024" , "2017-06-07 14:51", "1111", "22222", true);
-	//fileNode->append(fileNode1);
-	//CFileNode *fileNode2 = new CFileNode(QStringLiteral("我的文档.docx"), "2048", "2017-06-07 14:52", "1111", "22222", false);
-	//fileNode->append(fileNode2);
-	//CFileNode *fileNode3 = new CFileNode(QStringLiteral("表格.xls"), "4096", "2017-06-07 14:53", "1111", "22222", false);
-	//fileNode->append(fileNode3);
-	//CFileNode *fileNode4 = new CFileNode(QStringLiteral("计划.ppt"), "8192", "2017-06-07 14:54", "1111", "22222", false);
-	//fileNode->append(fileNode4);
-	//CFileNode *fileNode5 = new CFileNode(QStringLiteral("图片.png"), "81920", "2017-06-07 14:57", "1111", "22222", false);
-	//fileNode->append(fileNode5);
-	//fileNode1->append(fileNode2);
-	//fileNode1->append(fileNode3);
-	//fileNode1->append(fileNode4);
-	//fileNode1->append(fileNode5);
 	m_tableView->setModelData(&fileNode->m_childNodes);
 	m_tableView->showTable(&fileNode->m_childNodes);
 

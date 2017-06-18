@@ -36,6 +36,7 @@ private:
 	bool m_bListView;
 	CFileNode *m_pNode;
 
+	void removeItem(int nIndex);
 	void clearPathItem();
 };
 

@@ -9,7 +9,6 @@
 #include "Model/FileNode.h"
 #include "Model/qtablemodel.h"
 #include "Model/qsortfiltermodel.h"
-#include "Model/qtableitemdelegate.h"
 
 class QFileNameItem;
 

@@ -100,16 +100,13 @@ bool QTableTitleBarWidget::eventFilter(QObject *watched, QEvent *event)
 void QTableTitleBarWidget::slotRemovePathItem(int nIndex)
 {
 	if (nIndex == m_pathItems.size()-1)return;
-	QPathItem *pathItem = m_pathItems.at(nIndex + 1);
-	emit sigBack(pathItem->getCurNode()->m_parent);
-	delWidget(nIndex+1);
+	removeItem(nIndex + 1);
 }
 
 void QTableTitleBarWidget::slotBack()
 {
 	if (m_pathItems.size() == 1)return;
-	delWidget(m_pathItems.size()-1); 
-	emit sigBack(m_pNode->m_parent);
+	removeItem(m_pathItems.size() - 1);
 }
 
 void QTableTitleBarWidget::clearPathItem()
@@ -124,4 +121,11 @@ void QTableTitleBarWidget::clearPathItem()
 void QTableTitleBarWidget::slotAddWidget(CFileNode *pNode)
 {
 	addWidget(pNode);
+}
+
+void QTableTitleBarWidget::removeItem(int nIndex)
+{
+	QPathItem *pathItem = m_pathItems.at(nIndex);
+	emit sigBack(pathItem->getCurNode()->m_parent);
+	delWidget(nIndex);
 }

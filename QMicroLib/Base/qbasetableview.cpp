@@ -1,8 +1,8 @@
 #include "qbasetableview.h"
-#include "Dialogs/qfilenameitem.h"
 #include <QRegExp>
-#include <QDebug>
+#include "Dialogs/qfilenameitem.h"
 #include "Delegate/qwidgetdelegate.h"
+#include "Delegate/qnofocusDelegate.h"
 
 QBaseTableView::QBaseTableView(QWidget *parent)
 	: QTableView(parent),
@@ -222,7 +222,7 @@ void QBaseTableView::slotAddRow()
 	m_pHeaderView->setCheckBoxState(false);
 	slotCheckBoxStateChanged(false);
 
-	CFileNode *fileNode = new CFileNode(QStringLiteral("新建文件夹"), "10240", "2017-06-07 12:22", "eeee", "22ddd222", true);
+	CFileNode *fileNode = new CFileNode(QStringLiteral("新建文件夹"), "", "2017-06-07 12:22", "", "", true);
 	m_childNodes->insert(0, fileNode);
 	m_pModel->refreshModel();
 
