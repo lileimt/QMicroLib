@@ -35,7 +35,7 @@ private:
 	void setFileName(QString fileName);
 protected:
 	//void paintEvent(QPaintEvent *event);
-
+	bool eventFilter(QObject *watched, QEvent *event);
 signals :
 	void sigSetChecked();
 	void sigChangeDir(CFileNode *pNode);

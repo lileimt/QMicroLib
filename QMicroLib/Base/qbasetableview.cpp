@@ -3,6 +3,7 @@
 #include "Dialogs/qfilenameitem.h"
 #include "Delegate/qwidgetdelegate.h"
 #include "Delegate/qnofocusDelegate.h"
+#include <QDebug>
 
 QBaseTableView::QBaseTableView(QWidget *parent)
 	: QTableView(parent),
@@ -19,6 +20,10 @@ QBaseTableView::QBaseTableView(QWidget *parent)
 	setSelectionBehavior(QAbstractItemView::SelectRows); //设置选择行为时每次选择一行
 	//setSelectionMode(QAbstractItemView::SingleSelection);
 	setEditTriggers(QAbstractItemView::NoEditTriggers);
+	setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(this, &QBaseTableView::customContextMenuRequested, this, &QBaseTableView::slotContextMenu);
+	createAction();            //文件的右键菜单
+	createEmptyAction();  //空白区域的右键菜单
 
 	QHeaderView *verticalHeaderView = verticalHeader();
 	verticalHeaderView->setDefaultSectionSize(25);
@@ -76,6 +81,16 @@ QBaseTableView::~QBaseTableView()
 	delete m_pHeaderView;
 	delete m_pModel;
 	delete m_pSortMode;
+	delete m_popMenu;
+	delete m_popEmptyMenu;
+	delete m_openAction;
+	delete m_downloadAction;
+	delete m_shareAction;
+	delete m_renameAction;
+	delete m_deleteAction;
+	delete m_attributeAction;
+	delete m_newDirAction;
+	delete m_uploadAction;
 	deleteWidget();
 }
 
@@ -391,4 +406,65 @@ void	QBaseTableView::slotChangeDir(CFileNode *pNode)
 void QBaseTableView::slotBackDir(CFileNode *pNode)
 {
 	showTable(&pNode->m_childNodes);
+}
+
+void QBaseTableView::slotContextMenu(QPoint point)
+{
+	QModelIndex index = this->indexAt(point);
+	qDebug() << point << index.row();
+	if (index.isValid()){
+		//setCurrentIndex(index); 
+		//connect(m_openAction, &QAction::triggered, [=](){
+		//	qDebug() << "open";
+		//});
+		//connect(m_renameAction, &QAction::triggered, [=](){
+		//	qDebug() << "rename" << index.row();
+
+		//	renameAction(index.row());
+		//});
+		m_popMenu->exec(QCursor::pos());
+	}else{
+		m_popEmptyMenu->exec(QCursor::pos());
+	}
+}
+
+void QBaseTableView::createAction()
+{
+	m_popMenu = new QMenu(this);
+	m_openAction = new QAction(QStringLiteral("打开"),this);
+	m_downloadAction = new QAction(QStringLiteral("下载"), this);
+	m_shareAction = new QAction(QIcon(":/toolbar/share"),QStringLiteral("分享"), this);
+	m_renameAction = new QAction(QStringLiteral("重命名"), this);
+	m_deleteAction = new QAction(QStringLiteral("删除"), this);
+	m_attributeAction = new QAction(QStringLiteral("属性"), this);
+
+	m_popMenu->addAction(m_openAction);
+	m_popMenu->addSeparator();
+	m_popMenu->addAction(m_downloadAction);
+	m_popMenu->addAction(m_shareAction);
+	m_popMenu->addAction(m_renameAction);
+	m_popMenu->addAction(m_deleteAction);
+	m_popMenu->addSeparator();
+	m_popMenu->addAction(m_attributeAction);
+
+	connect(m_openAction, &QAction::triggered, [=](){
+		qDebug() << "open";
+	});
+}
+
+void QBaseTableView::createEmptyAction()
+{
+	m_popEmptyMenu = new QMenu(this);
+	m_newDirAction = new QAction(QStringLiteral("新建文件夹"), this);
+	m_uploadAction = new QAction(QStringLiteral("上传"), this);
+
+	m_popEmptyMenu->addAction(m_newDirAction);
+	m_popEmptyMenu->addAction(m_uploadAction);
+}
+
+void QBaseTableView::renameAction(int row)
+{
+	QFileNameItem *item = (	QFileNameItem *)getWidget(row);
+	item->showFileNameEdit();
+	qDebug() << row<<item->m_lineEdit;
 }

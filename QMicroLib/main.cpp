@@ -6,7 +6,8 @@ int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 
-	CommonHelper::setStyle(":/qss/skin");
+	//CommonHelper::setStyle(":/qss/skin");
+	CommonHelper::setStyle("Resources/qss/skin.css");
 
 	QMicroLib w;
 	w.show();

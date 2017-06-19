@@ -2,6 +2,8 @@
 #define QBASETABLEVIEW_H
 
 #include <QList>
+#include <QMenu>
+#include <QAction>
 #include <QTableView>
 #include <QMouseEvent>
 #include "qbaseheaderview.h"
@@ -48,6 +50,8 @@ public slots :
 	void slotShowOtherFiles();
 	void slotChangeDir(CFileNode *pNode);
 	void slotBackDir(CFileNode *pNode);
+
+	void slotContextMenu(QPoint point);
 signals:
 	void sigChangeDir(CFileNode *pNode);
 
@@ -62,12 +66,25 @@ private:
 	QList<CFileNode *> m_filterNodes;
 	int m_curRow;
 	int m_iCheckBoxSelectedCount;
+	QMenu *m_popMenu;
+	QMenu *m_popEmptyMenu;
+	QAction *m_openAction;
+	QAction *m_downloadAction;
+	QAction *m_shareAction;
+	QAction *m_uploadAction;
+	QAction *m_newDirAction;
+	QAction *m_renameAction;
+	QAction *m_deleteAction;
+	QAction *m_attributeAction;
 
 	void updateRow(int row);
 	void resetRow();
 	void deleteWidget();
 	void filterFileNodes(QString strText);
 	void getAllFilesByType(QList<CFileNode *> *childNodes, QString strText);
+	void createAction();
+	void createEmptyAction();
+	void renameAction(int row);
 };
 
 #endif // QBASETABLEVIEW_H

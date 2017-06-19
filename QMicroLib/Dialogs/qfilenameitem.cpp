@@ -11,6 +11,7 @@ QFileNameItem::QFileNameItem(CFileNode *node, QWidget *parent)
 	//m_parentWidget = static_cast<QBaseTableView *>(parent);
 	m_lineEdit = ui.lineEdit;
 	m_checkBox = ui.checkBox;
+	setFocusPolicy(Qt::ClickFocus);
 	//setWindowFlags(Qt::FramelessWindowHint);
 	ui.checkBox->setStyleSheet("QCheckBox{background:transparent;}");
 	ui.checkBox->setAttribute(Qt::WA_TranslucentBackground);
@@ -19,10 +20,6 @@ QFileNameItem::QFileNameItem(CFileNode *node, QWidget *parent)
 	//ui.btnDownload->setAttribute(Qt::WA_TranslucentBackground);
 	//ui.btnSend->setAttribute(Qt::WA_TranslucentBackground);
 	//ui.btnMore->setAttribute(Qt::WA_TranslucentBackground);
-
-	//IconHelper::getInstance()->setIcon(ui.btnDownload, QChar(0xf063));
-	//IconHelper::getInstance()->setIcon(ui.btnSend, QChar(0xf1d8));
-	//IconHelper::getInstance()->setIcon(ui.btnMore, QChar(0xf067));
 	
 	QPixmap pixmap = QBaseFileIcon::getFileIconByExtension(m_fileNode->m_fileName, m_fileNode->m_bDir);
 	ui.lblIcon->setPixmap(pixmap);
@@ -31,25 +28,24 @@ QFileNameItem::QFileNameItem(CFileNode *node, QWidget *parent)
 	//ui.lblIcon->setPixmap(QPixmap(pixmap));
 
 	ui.lblName->setText(m_fileNode->m_fileName);
-	//m_lineEdit = new QLineEdit(this);
 	QRect rect = ui.lblName->geometry();
 	m_lineEdit->setGeometry(rect.x(), rect.y(), rect.width() + 10, rect.height());
+	//m_lineEdit->installEventFilter(this);
 	//m_lineEdit->setText(ui.lblName->text());
 	//showFileNameEdit();
 	hideFileNameEdit();
 
 	connect(m_lineEdit, &QLineEdit::returnPressed, [=](){
+		m_fileNode->setFileName(m_lineEdit->text());
 		setFileName(m_lineEdit->text());
 		hideFileNameEdit();
 	});
 
+	connect(m_lineEdit, &QLineEdit::editingFinished, [=](){
+		hideFileNameEdit();
+	});
+
 	connect(m_checkBox, &QCheckBox::clicked, [=](){
-		//if (m_checkBox->checkState() == Qt::Checked){
-		//	m_parentWidget->checkBoxSelectedCountIncrease();
-		//}else{
-		//	m_parentWidget->checkBoxSelectedCountDecrease();
-		//}
-		//m_parentWidget->setCheckBoxState();
 		emit sigSetChecked();
 	});
 
@@ -67,7 +63,7 @@ QFileNameItem::~QFileNameItem()
 
 void QFileNameItem::showFileNameEdit()
 {
-	m_lineEdit->setText(ui.lblName->text());
+	m_lineEdit->setText(m_fileNode->m_fileName);
 	m_lineEdit->show();
 	ui.lblName->hide();
 }
@@ -107,14 +103,14 @@ void QFileNameItem::setBackgroundColor(QColor color)
 	setStyleSheet(strColor);
 }
 
-// 解决setstylesheet不生效的问题
-//void QFileNameItem::paintEvent(QPaintEvent *event)
-//{
-//	QStyleOption opt;
-//	opt.init(this);
-//
-//	QPainter p(this);
-//	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-//
-//	//QWidget::paintEvent(event);
-//}
+bool QFileNameItem::eventFilter(QObject *watched, QEvent *event)
+{
+	//if (m_lineEdit == static_cast<QLineEdit *>(watched)){
+	//	if (event->type() == QEvent::FocusIn){
+			//m_lineEdit->selectAll();
+	//	}else if (event->type() == QEvent::FocusOut){
+			//hideFileNameEdit();
+	//	}
+	//}
+	return QWidget::eventFilter(watched, event);
+}

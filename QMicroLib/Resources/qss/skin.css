@@ -5,7 +5,7 @@
 
 QWidget{
     border:none;
-    background:white;
+    /*background:white;*/
 }
 
 QTableWidget {
