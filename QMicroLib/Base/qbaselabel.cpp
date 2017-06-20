@@ -47,17 +47,20 @@ void QBaseLabel::mousePressEvent(QMouseEvent *ev)
 void QBaseLabel::setText(const QString &string)
 {
 	m_string = string;
-	QFontMetrics fontMetrics(font());
-	m_length = fontMetrics.width(string);
+	m_length = getWidth(m_string);
 	QString str = string;
-	if (m_length > this->width()){
-		m_length = this->width();
+	QFontMetrics fontMetrics(font());
+	int width = this->width();
+	if (m_length > width){
+		m_length = width;
 		str = fontMetrics.elidedText(string, Qt::ElideRight, this->width());
 	}
 	QLabel::setText(str);
 }
 
-int QBaseLabel::getWidth()
+int QBaseLabel::getWidth(QString string)
 {
-	return m_length;
+	QFontMetrics fontMetrics(font());
+	int length = fontMetrics.width(string);
+	return length;
 }

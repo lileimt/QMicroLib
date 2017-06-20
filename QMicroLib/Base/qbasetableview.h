@@ -30,7 +30,8 @@ public:
 	void addIndexWidget(QModelIndex index, CFileNode *pNode);
 	void setCheckBoxState();
 	void updateFirstColumn();
-	void setAllRowsSelect();
+	void setRowSelect(int startRow, int endRow);
+	int getHeaderWidth(int index);
 protected:
 	void mouseMoveEvent(QMouseEvent *event);
 	void leaveEvent(QEvent *event);
@@ -65,6 +66,7 @@ private:
 	QList<CFileNode *> *m_childNodes;
 	QList<CFileNode *> m_filterNodes;
 	int m_curRow;
+	int m_curRightRow;   //当前右键菜单的行
 	int m_iCheckBoxSelectedCount;
 	QMenu *m_popMenu;
 	QMenu *m_popEmptyMenu;
@@ -85,6 +87,7 @@ private:
 	void createAction();
 	void createEmptyAction();
 	void renameAction(int row);
+	CFileNode *getRealIndex(QList<CFileNode *> *childNodes, int curRow, int &realRow);
 };
 
 #endif // QBASETABLEVIEW_H

@@ -9,6 +9,7 @@ QBaseTableView::QBaseTableView(QWidget *parent)
 	: QTableView(parent),
 	m_pHeaderView(nullptr),
 	m_curRow(-1),
+	m_curRightRow(-1),
 	m_iCheckBoxSelectedCount(0),
 	m_childNodes(NULL)
 {
@@ -47,6 +48,9 @@ QBaseTableView::QBaseTableView(QWidget *parent)
 		}
 		resetRow();
 	});
+	connect(m_pHeaderView, &QBaseHeaderView::sectionClicked, [=](){
+		resetRow();
+	});
 	connect(m_pHeaderView, &QBaseHeaderView::stateChanged, this, &QBaseTableView::slotCheckBoxStateChanged);
 
 	//设置model显示数据
@@ -60,6 +64,9 @@ QBaseTableView::QBaseTableView(QWidget *parent)
 
 	connect(this, &QBaseTableView::clicked, [=](const QModelIndex &index){
 		int row = index.row();
+		//QModelIndex _index = model()->index(index.row(), FILE_NAME_COLUMN);
+		setCurrentIndex(index);
+		//clearSelection();
 		int nRows = model()->rowCount();
 		for (int i = 0; i < nRows; i++){
 			if (i == row){
@@ -100,6 +107,11 @@ QFileNameItem *QBaseTableView::getWidget(int row)
 	return static_cast<QFileNameItem *>(indexWidget(index));
 }
 
+int QBaseTableView::getHeaderWidth(int index)
+{
+	return m_pHeaderView->sectionSize(index);
+}
+
 QTableModel *QBaseTableView::getTableModel()
 {
 	return m_pModel;
@@ -108,6 +120,7 @@ QTableModel *QBaseTableView::getTableModel()
 void QBaseTableView::initHeaderView(QStringList header)
 {
 	m_pModel->setHorizontalHeaderList(header);
+	sortByColumn(CHECK_BOX_COLUMN, Qt::AscendingOrder);
 }
 
 void QBaseTableView::setModelData(QList<CFileNode *> *childNodes)
@@ -122,7 +135,7 @@ void QBaseTableView::showTable(QList<CFileNode *> *childNodes)
 	m_pModel->refreshModel();
 	setColumnWidth(0, 350);     //设置第1列的宽度
 	//setColumnWidth(1, 350);     //设置第1列的宽度
-	setColumnHidden(FILE_NAME_COLUMN, true);
+	//setColumnHidden(FILE_NAME_COLUMN, true);
 	setColumnHidden(FILE_AUTHOR_CLOUMN, true);
 
 	updateFirstColumn();
@@ -137,6 +150,9 @@ void QBaseTableView::addIndexWidget(QModelIndex index, CFileNode *pNode)
 		setCheckBoxState();
 	});
 	connect(widget, &QFileNameItem::sigChangeDir, this, &QBaseTableView::slotChangeDir);
+	//connect(widget, &QFileNameItem::clicked, [=](){
+		//setCurrentIndex(model()->index(index.row(),1));
+	//});
 	m_pList.push_back(widget);
 	widget->setToolButtonVisible(false);
 	setIndexWidget(index, widget);
@@ -147,17 +163,16 @@ void QBaseTableView::updateRow(int row)
 	if (row == m_curRow)
 		return;
 
-	QFileNameItem *widget = NULL;
-	if (m_curRow >= 0){
-		widget = getWidget(m_curRow);
+	if (row >= 0){
+		QFileNameItem *widget = getWidget(row);
 		if (widget){
-			widget->setToolButtonVisible(false);
+			widget->setToolButtonVisible(true);
 		}
 	}
-	if (row >= 0){
-		widget = getWidget(m_curRow);
+	if (m_curRow >= 0){
+		QFileNameItem *widget = getWidget(m_curRow);
 		if (widget){
-			getWidget(row)->setToolButtonVisible(true);
+			widget->setToolButtonVisible(false);
 		}
 	}
 	
@@ -168,6 +183,11 @@ void QBaseTableView::updateRow(int row)
 		update(model()->index(row, i));
 	}
 	m_curRow = row;
+
+	QFileNameItem *widget = getWidget(m_curRow);
+	if (widget){
+		getWidget(row)->setToolButtonVisible(true);
+	}
 }
 
 void QBaseTableView::mouseMoveEvent(QMouseEvent *event)
@@ -197,7 +217,7 @@ void QBaseTableView::slotCheckBoxStateChanged(bool bChecked)
 	int rowCount = m_pModel->rowCount();
 	if (bChecked){
 		m_iCheckBoxSelectedCount = rowCount;
-		setAllRowsSelect();
+		selectAll();
 	}else{
 		m_iCheckBoxSelectedCount = 0;
 		clearSelection();
@@ -257,9 +277,10 @@ void QBaseTableView::slotDeleteRow()
 	for (int i = model_count - 1; i >= 0; i--)
 	{
 		QModelIndex model_index = model_index_list.at(i);
-		int row = model_index.row();
-		if (!list_row.contains(row))
-			list_row.append(row);
+		int realRow = -1;
+		getRealIndex(m_childNodes, model_index.row(), realRow);
+		if (!list_row.contains(realRow))
+			list_row.append(realRow);
 	}
 
 	if (list_row.isEmpty())
@@ -288,14 +309,13 @@ void QBaseTableView::updateFirstColumn()
 	}
 }
 
-void QBaseTableView::setAllRowsSelect()
+void QBaseTableView::setRowSelect(int startRow,int endRow)
 {
-	int nRows = model()->rowCount();
 	QItemSelectionModel* selection_model = selectionModel();
 	QItemSelection selection;
 
-	QModelIndex left = model()->index(0, 0);
-	QModelIndex right = model()->index(nRows - 1, model()->columnCount() - 1);
+	QModelIndex left = model()->index(startRow, 0);
+	QModelIndex right = model()->index(endRow - 1, model()->columnCount() - 1);
 	QItemSelection sel(left, right);
 	selection.merge(sel, QItemSelectionModel::Select);  //将每一个单元格/每一行都作为一个QItemSelection 对象，并拼接到总的QItemSelection 对象中  
 	selection_model->select(selection, QItemSelectionModel::Select);
@@ -413,15 +433,7 @@ void QBaseTableView::slotContextMenu(QPoint point)
 	QModelIndex index = this->indexAt(point);
 	qDebug() << point << index.row();
 	if (index.isValid()){
-		//setCurrentIndex(index); 
-		//connect(m_openAction, &QAction::triggered, [=](){
-		//	qDebug() << "open";
-		//});
-		//connect(m_renameAction, &QAction::triggered, [=](){
-		//	qDebug() << "rename" << index.row();
-
-		//	renameAction(index.row());
-		//});
+		m_curRightRow = index.row();
 		m_popMenu->exec(QCursor::pos());
 	}else{
 		m_popEmptyMenu->exec(QCursor::pos());
@@ -448,7 +460,32 @@ void QBaseTableView::createAction()
 	m_popMenu->addAction(m_attributeAction);
 
 	connect(m_openAction, &QAction::triggered, [=](){
-		qDebug() << "open";
+		int realRow = -1;
+		CFileNode *pNode = getRealIndex(m_childNodes, m_curRightRow, realRow);
+		if (pNode->m_bDir){
+			showTable(&pNode->m_childNodes);
+			emit sigChangeDir(pNode);
+		}
+	});
+	connect(m_downloadAction, &QAction::triggered, [=](){
+		qDebug() << "download";
+	});
+	connect(m_shareAction, &QAction::triggered, [=](){
+		qDebug() << "share";
+	});
+	connect(m_renameAction, &QAction::triggered, [=](){
+		getWidget(m_curRightRow)->showFileNameEdit();
+	});
+	connect(m_deleteAction, &QAction::triggered, [=](){
+		int realRow = 0;
+		getRealIndex(m_childNodes, m_curRightRow, realRow);
+		m_childNodes->removeAt(realRow);
+		m_pModel->refreshModel();
+		updateFirstColumn();
+	});
+
+	connect(m_attributeAction, &QAction::triggered, [=](){
+		qDebug() << "attribute";
 	});
 }
 
@@ -460,6 +497,13 @@ void QBaseTableView::createEmptyAction()
 
 	m_popEmptyMenu->addAction(m_newDirAction);
 	m_popEmptyMenu->addAction(m_uploadAction);
+
+	connect(m_newDirAction, &QAction::triggered, [=](){
+		slotAddRow();
+	});
+	connect(m_uploadAction, &QAction::triggered, [=](){
+		
+	});
 }
 
 void QBaseTableView::renameAction(int row)
@@ -467,4 +511,22 @@ void QBaseTableView::renameAction(int row)
 	QFileNameItem *item = (	QFileNameItem *)getWidget(row);
 	item->showFileNameEdit();
 	qDebug() << row<<item->m_lineEdit;
+}
+
+CFileNode *QBaseTableView::getRealIndex(QList<CFileNode *> *childNodes, int curRow, int &realRow)
+{
+	int count = 0;
+	QVariant variant = model()->data(model()->index(curRow, CHECK_BOX_COLUMN), Qt::UserRole);
+	CFileNode *pNode = (CFileNode *)variant.value<void *>();
+	//qDebug() << pNode->m_fileName;
+	QList<CFileNode *>::iterator it = childNodes->begin();
+	for (; it != childNodes->end(); it++){
+		CFileNode *pListNode = static_cast<CFileNode *>(*it);
+		if (!pListNode->m_fileName.compare(pNode->m_fileName)){
+			realRow = count;
+			return pListNode;
+		}
+		count++;
+	}
+	return NULL;
 }

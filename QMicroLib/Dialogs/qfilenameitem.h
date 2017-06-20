@@ -9,9 +9,9 @@
 #include <QPaintEvent>
 #include "ui_filenameitem.h"
 #include "Base/qbasefileicon.h"
-//#include "Base/qbasetablewidget.h"
-//#include "Base/qbasetableview.h"
 #include "Model/FileNode.h"
+
+class QBaseTableView;
 
 class QFileNameItem : public QWidget
 {
@@ -29,23 +29,25 @@ private:
 	//QString m_fileName;
 	QIcon m_icon;
 	//QBaseTableWidget *m_parentWidget;
-	//QBaseTableView *m_parentWidget;
+	QBaseTableView *m_parentWidget;
 
 	void hideFileNameEdit();
 	void setFileName(QString fileName);
 protected:
 	//void paintEvent(QPaintEvent *event);
-	bool eventFilter(QObject *watched, QEvent *event);
+	//bool eventFilter(QObject *watched, QEvent *event);
+	//void mousePressEvent(QMouseEvent *event);
 signals :
 	void sigSetChecked();
 	void sigChangeDir(CFileNode *pNode);
+	//void clicked();
 
 public:
 	QLineEdit *m_lineEdit;
 	QCheckBox *m_checkBox;
 
 	void setToolButtonVisible(bool bShow);
-	void setBackgroundColor(QColor color);
+	//void setBackgroundColor(QColor color);
 };
 
 #endif // QFILENAMEITEM_H

@@ -15,7 +15,7 @@ public:
 
 	void setHoverColor(bool bHoverColor);
 	void setText(const QString &string);
-	int getWidth();
+	int getWidth(QString string);
 protected:
 	void enterEvent(QEvent *event);
 	void leaveEvent(QEvent *event);

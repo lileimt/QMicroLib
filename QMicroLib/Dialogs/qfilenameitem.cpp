@@ -1,6 +1,7 @@
 #include "qfilenameitem.h"
-#include "common/iconhelper.h"
+//#include "common/iconhelper.h"
 #include "common/commonhelper.h"
+#include "Base/qbasetableview.h"
 
 QFileNameItem::QFileNameItem(CFileNode *node, QWidget *parent)
 	: QWidget(parent),
@@ -8,7 +9,7 @@ QFileNameItem::QFileNameItem(CFileNode *node, QWidget *parent)
 {
 	ui.setupUi(this);
 	//m_parentWidget = static_cast<QBaseTableWidget *>(parent);
-	//m_parentWidget = static_cast<QBaseTableView *>(parent);
+	m_parentWidget = static_cast<QBaseTableView *>(parent);
 	m_lineEdit = ui.lineEdit;
 	m_checkBox = ui.checkBox;
 	setFocusPolicy(Qt::ClickFocus);
@@ -27,9 +28,9 @@ QFileNameItem::QFileNameItem(CFileNode *node, QWidget *parent)
 	//QString pixmap = CommonHelper::getIconBySuffix(fileName, bDir);
 	//ui.lblIcon->setPixmap(QPixmap(pixmap));
 
-	ui.lblName->setText(m_fileNode->m_fileName);
-	QRect rect = ui.lblName->geometry();
-	m_lineEdit->setGeometry(rect.x(), rect.y(), rect.width() + 10, rect.height());
+	//ui.lblName->setText(m_fileNode->m_fileName);
+	//QRect rect = ui.lblName->geometry();
+	//m_lineEdit->setGeometry(rect.x(), rect.y(), rect.width() + 10, rect.height());
 	//m_lineEdit->installEventFilter(this);
 	//m_lineEdit->setText(ui.lblName->text());
 	//showFileNameEdit();
@@ -63,6 +64,8 @@ QFileNameItem::~QFileNameItem()
 
 void QFileNameItem::showFileNameEdit()
 {
+	QRect rect = ui.lblName->geometry();
+	m_lineEdit->setGeometry(rect.x(), rect.y(), rect.width() + 10, rect.height());
 	m_lineEdit->setText(m_fileNode->m_fileName);
 	m_lineEdit->show();
 	ui.lblName->hide();
@@ -94,23 +97,19 @@ void QFileNameItem::setToolButtonVisible(bool bShow)
 	ui.btnMore->setVisible(bShow);
 }
 
-void QFileNameItem::setBackgroundColor(QColor color)
-{
-	QString strColor = QString("background:rgb(%1,%2,%3);")
-										.arg(color.red())
-										.arg(color.green())
-										.arg(color.blue());
-	setStyleSheet(strColor);
-}
+//void QFileNameItem::setBackgroundColor(QColor color)
+//{
+//	QString strColor = QString("background:rgb(%1,%2,%3);")
+//										.arg(color.red())
+//										.arg(color.green())
+//										.arg(color.blue());
+//	setStyleSheet(strColor);
+//}
 
-bool QFileNameItem::eventFilter(QObject *watched, QEvent *event)
-{
-	//if (m_lineEdit == static_cast<QLineEdit *>(watched)){
-	//	if (event->type() == QEvent::FocusIn){
-			//m_lineEdit->selectAll();
-	//	}else if (event->type() == QEvent::FocusOut){
-			//hideFileNameEdit();
-	//	}
+//void QFileNameItem::mousePressEvent(QMouseEvent *event)
+//{
+	//if (event->button() == Qt::LeftButton){
+		//emit clicked();
 	//}
-	return QWidget::eventFilter(watched, event);
-}
+	//QWidget::mousePressEvent(event);
+//}

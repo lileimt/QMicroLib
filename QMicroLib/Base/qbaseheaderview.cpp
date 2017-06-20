@@ -51,6 +51,7 @@ void QBaseHeaderView::paintSection(QPainter *painter, const QRect &rect, int log
 void QBaseHeaderView::mouseMoveEvent(QMouseEvent *e)
 {
 	emit headerEntered();
+	return QHeaderView::mouseMoveEvent(e);
 }
 
 void QBaseHeaderView::mousePressEvent(QMouseEvent *e)

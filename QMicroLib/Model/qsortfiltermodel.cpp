@@ -48,30 +48,33 @@ bool QSortFilterModel::lessThan(const QModelIndex &source_left, const QModelInde
 
 		bool left = leftNode->m_bDir;
 		bool right = rightNode->m_bDir;
-		if (                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  left ^ right){
+
+		qDebug() << leftNode->m_fileName << "," << rightNode->m_fileName;
+		qDebug() << left << "," << right;
+		if (left ^ right){
 			return left;
 		}
-		//QModelIndex leftFileName = sourceModel()->index(source_left.row(), FILE_NAME_COLUMN);
-		//QModelIndex rightFileName = sourceModel()->index(source_right.row(), FILE_NAME_COLUMN);
-		//QVariant leftData = sourceModel()->data(leftFileName);
-		//QVariant rightData = sourceModel()->data(rightFileName);
-
-		//QVariant leftData = sourceModel()->data(source_left, Qt::UserRole);
-		//QVariant rightData = sourceModel()->data(source_right, Qt::UserRole);
 		
 		QString strLeftData = leftNode->m_fileName;
 		QString strRightData = rightNode->m_fileName;
 
 		return strLeftData.compare(strRightData, Qt::CaseInsensitive) < 0;
 	}else if (leftColumn == FILE_SIZE_COLUMN && rightColumn == FILE_SIZE_COLUMN){
-		bool left = isDir(source_left);
-		bool right = isDir(source_right);
+		QVariant leftData = sourceModel()->data(sourceModel()->index(source_left.row(),CHECK_BOX_COLUMN), Qt::UserRole);
+		QVariant rightData = sourceModel()->data(sourceModel()->index(source_right.row(), CHECK_BOX_COLUMN), Qt::UserRole);
+
+		CFileNode *leftNode = (CFileNode *)leftData.value<void *>();
+		CFileNode *rightNode = (CFileNode *)rightData.value<void *>();
+
+		bool left = leftNode->m_bDir;
+		bool right = rightNode->m_bDir;
 		if (left ^ right){
 			return left;
 		}
-		QVariant leftData = sourceModel()->data(source_left, Qt::UserRole);
-		QVariant rightData = sourceModel()->data(source_right, Qt::UserRole);
-		return leftData.toLongLong() < rightData.toLongLong();
+
+		QVariant leftVar = sourceModel()->data(source_left, Qt::UserRole);
+		QVariant rightVar = sourceModel()->data(source_right, Qt::UserRole);
+		return leftVar.toLongLong() < rightVar.toLongLong();
 	}else if (leftColumn == FILE_TIME_COLUMN && rightColumn == FILE_TIME_COLUMN){
 		QVariant leftData = sourceModel()->data(source_left, Qt::UserRole);
 		QVariant rightData = sourceModel()->data(source_right, Qt::UserRole);

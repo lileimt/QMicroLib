@@ -60,14 +60,16 @@ QVariant QTableModel::data(const QModelIndex &index, int role) const
 	switch (role){
 		case Qt::BackgroundColorRole:
 		{
+				qDebug() << row << "," << m_hoverRow;
 				if (row == m_hoverRow){
-					return QColor("lightblue");
+					//return QColor("lightblue");
 				}
 				break;
 		}
 		case Qt::DisplayRole:
 		{
 				CFileNode *node = m_childNodes->at(row);
+				//qDebug() << row << "," << node->m_fileName;
 				switch (column)
 				{
 				case CHECK_BOX_COLUMN:
@@ -93,6 +95,7 @@ QVariant QTableModel::data(const QModelIndex &index, int role) const
 		case Qt::UserRole:
 		{
 				CFileNode *node = m_childNodes->at(row);
+				//qDebug() << row<<","<<node->m_fileName;
 				if (column == CHECK_BOX_COLUMN){
 					return QVariant::fromValue((void *)node);//node->m_fileName;
 				}else if (column == FILE_SIZE_COLUMN){
