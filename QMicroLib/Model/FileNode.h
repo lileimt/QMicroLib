@@ -27,10 +27,13 @@ public:
 	QList<CFileNode *> m_childNodes;    //当前节点的子节点
 	
 	void setFileName(QString fileName);
+	void setParent(CFileNode *pNode);
+	CFileNode *getParent();
 	void setIsDir(bool bDir);
 	void setFileSize(QString size);
 	void setFileTime(QString time);
 
 	void append(CFileNode *pNode);
+	void insert(CFileNode *pNode);
 };
 

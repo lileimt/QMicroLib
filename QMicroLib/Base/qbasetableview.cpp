@@ -3,6 +3,7 @@
 #include "Dialogs/qfilenameitem.h"
 #include "Delegate/qwidgetdelegate.h"
 #include "Delegate/qnofocusDelegate.h"
+#include "Common/commonhelper.h"
 #include <QDebug>
 
 QBaseTableView::QBaseTableView(QWidget *parent)
@@ -11,7 +12,8 @@ QBaseTableView::QBaseTableView(QWidget *parent)
 	m_curRow(-1),
 	m_curRightRow(-1),
 	m_iCheckBoxSelectedCount(0),
-	m_childNodes(NULL)
+	m_childNodes(NULL),
+	m_parentNode(NULL)
 {
 	setFrameShape(QFrame::NoFrame);//设置无边框
 	setShowGrid(false);//设置不显示格子线
@@ -126,6 +128,8 @@ void QBaseTableView::initHeaderView(QStringList header)
 void QBaseTableView::setModelData(QList<CFileNode *> *childNodes)
 {
 	m_childNodes = childNodes;
+	if (childNodes == NULL) return;
+	m_parentNode = childNodes->at(0)->getParent();
 }
 
 void QBaseTableView::showTable(QList<CFileNode *> *childNodes)
@@ -257,13 +261,16 @@ void QBaseTableView::slotAddRow()
 	m_pHeaderView->setCheckBoxState(false);
 	slotCheckBoxStateChanged(false);
 
-	CFileNode *fileNode = new CFileNode(QStringLiteral("新建文件夹"), "", "2017-06-07 12:22", "", "", true);
-	m_childNodes->insert(0, fileNode);
+	CFileNode *fileNode = new CFileNode(QStringLiteral("新建文件夹"), "", CommonHelper::getCurrentTime(), "", "", true);
+	fileNode->setParent(m_parentNode);
+	m_childNodes->insert(0,fileNode);
 	m_pModel->refreshModel();
-
 	updateFirstColumn();
 
-	getWidget(0)->m_checkBox->setCheckState(Qt::Checked);
+	int realRow = getNewDirIndex(QStringLiteral("新建文件夹"));
+	getWidget(realRow)->m_checkBox->setCheckState(Qt::Checked);
+	QModelIndex index = model()->index(realRow, FILE_NAME_COLUMN);
+	setCurrentIndex(index);
 }
 
 void QBaseTableView::slotDeleteRow()
@@ -529,4 +536,18 @@ CFileNode *QBaseTableView::getRealIndex(QList<CFileNode *> *childNodes, int curR
 		count++;
 	}
 	return NULL;
+}
+
+int QBaseTableView::getNewDirIndex(QString fileName)
+{
+	int nRows = model()->rowCount();
+	for (int i = 0; i < nRows; i++){
+		QModelIndex index = model()->index(i, CHECK_BOX_COLUMN);
+		QVariant variant = model()->data(index, Qt::UserRole);
+		CFileNode *pNode = (CFileNode *)variant.value<void *>();
+		if (!pNode->m_fileName.compare(fileName)){
+			return i;
+		}
+	}
+	return -1;
 }

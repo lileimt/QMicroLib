@@ -63,6 +63,7 @@ private:
 	//QMap<QString, QFileNameItem*> m_pMap;
 	QList<QFileNameItem *> m_pList;
 	//CFileNode *m_fileNode;
+	CFileNode *m_parentNode;
 	QList<CFileNode *> *m_childNodes;
 	QList<CFileNode *> m_filterNodes;
 	int m_curRow;
@@ -88,6 +89,7 @@ private:
 	void createEmptyAction();
 	void renameAction(int row);
 	CFileNode *getRealIndex(QList<CFileNode *> *childNodes, int curRow, int &realRow);
+	int getNewDirIndex(QString fileName);
 };
 
 #endif // QBASETABLEVIEW_H

@@ -54,3 +54,19 @@ void CFileNode::append(CFileNode *pNode)
 	m_childNodes.append(pNode);
 	pNode->m_parent = this;
 }
+
+void CFileNode::insert(CFileNode *pNode)
+{
+	pNode->m_parent = this;
+	m_childNodes.insert(0, pNode);
+}
+
+void CFileNode::setParent(CFileNode *pNode)
+{
+	m_parent = pNode;
+}
+
+CFileNode *CFileNode::getParent()
+{
+	return m_parent;
+}

@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QString>
 #include <QFileInfo>
+#include <QDateTime>
 #include <QFileDialog>
 #include <QApplication>
 
@@ -91,6 +92,11 @@ public:
         }
         return type;
     }
+
+	static QString getCurrentTime(){
+		QDateTime time = QDateTime::currentDateTime();//获取系统现在的时间
+		return time.toString("yyyy-MM-dd hh:mm");
+	}
 };
 
 #endif // COMMONHELPER_H
